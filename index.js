@@ -3,7 +3,11 @@ const db = require("./db");
 require("console.table");
 
 init();
-loadMainPrompts();
+
+function init() {
+     loadMainPrompts();
+  }
+
 
   
     
