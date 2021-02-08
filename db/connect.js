@@ -9,7 +9,6 @@ const connection = mysql.createConnection({
   password: "N0password",
   database: "employees"
 });
-
 connection.connect();
 
 

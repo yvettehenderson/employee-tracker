@@ -26,6 +26,6 @@ VALUES
     ('Sharon', 'Needles', 4),
     ('Courtney', 'Act', 3),
     ('Kim', 'Chi', 2, NULL),
-    ('Alyssa', 'Edwards',1),
-    ('Roxxy', 'Andrews', 2),
+    ('Alyssa', 'Edwards',1),Null),
+    ('Roxxy', 'Andrews', 2, NULL),
    
