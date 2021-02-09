@@ -5,20 +5,20 @@ require("console.table");
 init();
 
 function init() {
-     loadMainPrompts();
+     loadPrompts();
   }
 
 
   
     
  
-  async function loadMainPrompts() {
-    const { choice } = await prompt([
+  async function loadPrompts() {
+    const { options } = await prompt([
       {
         type: "list",
-        name: "choice",
+        name: "option",
         message: "How would you like to proceed?",
-        choices: [
+        options: [
           {
             name: "Add Department",
             value: "ADD_DEPARTMENT"
@@ -55,7 +55,7 @@ function init() {
         ]
       }
     ]);
-    switch (choice) {
+    switch (option) {
     case "ADD_DEPARTMENT":
       return addDepartment();
       case "ADD_ROLE":
@@ -69,7 +69,7 @@ function init() {
      case "VIEW_EMPLOYEES":
         return viewEmployees();
         case "UPDATE_EMPLOYEE_ROLE":
-      return updateEmployeeRole();       
+      return updateRole();       
    
     }
 }
@@ -77,20 +77,18 @@ async function addDepartment() {
     const department = await prompt([
       {
         name: "name",
-        message: "What is the name of the department?"
+        message: "department?"
       }
     ]);
   
-    await db.createDepartment(department);
-  
-    console.log(`Added ${department.name} to the database`);
-  
-    loadMainPrompts();
+    await db.newDepartment(department);
+
+    loadPrompts();
   }
   async function addRole() {
     const departments = await db.findAllDepartments();
   
-    const departmentChoices = departments.map(({ id, name }) => ({
+    const departmentOptions = departments.map(({ id, name }) => ({
       name: name,
       value: id
     }));
@@ -98,42 +96,40 @@ async function addDepartment() {
     const role = await prompt([
       {
         name: "title",
-        message: "What is the name of the role?"
+        message: "role?"
       },
       {
         name: "salary",
-        message: "What is the salary of the role?"
+        message: "salary?"
       },
       {
         type: "list",
         name: "department_id",
-        message: "Which department does the role belong to?",
-        choices: departmentChoices
+        message: "department ID?",
+        options: departmentOptions
       }
     ]);
   
-    await db.createRole(role);
+    await db.newRole(role);
   
-    console.log(`Added ${role.title} to the database`);
-  
-    loadMainPrompts();
+    loadPrompts();
   }
   async function addEmployee() {
-    const roles = await db.findAllRoles();
-    const employees = await db.findAllEmployees();
+    const roles = await db.findRoles();
+    const employees = await db.allEmployees();
   
     const employee = await prompt([
       {
         name: "first_name",
-        message: "What is the employee's first name?"
+        message: "first name?"
       },
       {
         name: "last_name",
-        message: "What is the employee's last name?"
+        message: "last name?"
       }
     ]);
   
-    const roleChoices = roles.map(({ id, title }) => ({
+    const roleOptions = roles.map(({ id, title }) => ({
       name: title,
       value: id
     }));
@@ -141,63 +137,51 @@ async function addDepartment() {
     const { roleId } = await prompt({
       type: "list",
       name: "roleId",
-      message: "What is the employee's role?",
-      choices: roleChoices
+      message: "employee's role?",
+      options: roleOptions
     });
   
     employee.role_id = roleId;
   
-    const managerChoices = employees.map(({ id, first_name, last_name }) => ({
+    const managerOptions = employees.map(({ id, first_name, last_name }) => ({
       name: `${first_name} ${last_name}`,
       value: id
     }));
-    managerChoices.unshift({ name: "None", value: null });
+    managerOptions.unshift({ name: "None", value: null });
   
     const { managerId } = await prompt({
       type: "list",
       name: "managerId",
-      message: "Who is the employee's manager?",
-      choices: managerChoices
+      message: "employee's manager?",
+      options: managerOptions
     });
   
     employee.manager_id = managerId;
   
-    await db.createEmployee(employee);
-  
-    console.log(
-      `Added ${employee.first_name} ${employee.last_name} to the database`
-    );
-  
-    loadMainPrompts();
+    await db.newEmployee(employee);
+
+    loadPrompts();
   }
   async function viewDepartments() {
     const departments = await db.findAllDepartments();
   
-    console.log("\n");
-    console.table(departments);
-  
-    loadMainPrompts();
+    loadPrompts();
   } 
   async function viewRoles() {
-    const roles = await db.findAllRoles();
+    const roles = await db.findRoles();
   
-    console.log("\n");
-    console.table(roles);
-  
-    loadMainPrompts();
+    loadPrompts();
   }
   async function viewEmployees() {
-    const employees = await db.findAllEmployees();
+    const employees = await db.allEmployees();
+
   
-    console.log("\n");
-    console.table(employees);
-  
-    loadMainPrompts();
+    loadPrompts();
   } 
-  async function updateEmployeeRole() {
-    const employees = await db.findAllEmployees();
+  async function updateRole() {
+    const employees = await db.allEmployees();
   
-    const employeeChoices = employees.map(({ id, first_name, last_name }) => ({
+    const employeeOptions = employees.map(({ id, first_name, last_name }) => ({
       name: `${first_name} ${last_name}`,
       value: id
     }));
@@ -206,14 +190,14 @@ async function addDepartment() {
       {
         type: "list",
         name: "employeeId",
-        message: "Which employee's role do you want to update?",
-        choices: employeeChoices
+        message: "role update?",
+        options: employeeOptions
       }
     ]);
   
-    const roles = await db.findAllRoles();
+    const roles = await db.findRoles();
   
-    const roleChoices = roles.map(({ id, title }) => ({
+    const roleOptions = roles.map(({ id, title }) => ({
       name: title,
       value: id
     }));
@@ -222,16 +206,15 @@ async function addDepartment() {
       {
         type: "list",
         name: "roleId",
-        message: "Which role do you want to assign the selected employee?",
-        choices: roleChoices
+        message: "Which role of  employee?",
+        options: roleOptions
       }
     ]);
   
-    await db.updateEmployeeRole(employeeId, roleId);
+    await db.updateRole(employeeId, roleId);
+
   
-    console.log("Updated employee's role");
-  
-    loadMainPrompts();
+    loadPrompts();
   }
 
   function quit() {
