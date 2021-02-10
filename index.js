@@ -75,6 +75,7 @@ function init() {
 async function addDepartment() {
     const department = await prompt([
       {
+        type: "input",
         name: "name",
         message: "department?"
       }
@@ -96,11 +97,13 @@ async function addDepartment() {
     }));
   
     const role = await prompt([
-      {
+      { 
+        type: "input",
         name: "title",
         message: "role?"
       },
       {
+        type: "input",
         name: "salary",
         message: "salary?"
       },
@@ -122,10 +125,12 @@ async function addDepartment() {
   
     const employee = await prompt([
       {
+        type: "input",
         name: "first_name",
         message: "first name?"
       },
       {
+        type: "input",
         name: "last_name",
         message: "last name?"
       }
