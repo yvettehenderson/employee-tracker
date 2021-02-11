@@ -1,19 +1,18 @@
 const { prompt } = require("inquirer");
 const db = require("./db");
-require("console.table");
+const table = require("console.table");
 
 
-init();
+start()
 
-function init() {
-     loadPrompts();
-  }
-
+function start() {
+  loadPrompts();
+}
   async function loadPrompts() {
     const { choice } = await prompt([
       {
         type: "list",
-        name: "option",
+        name: "choice",
         message: "How would you like to proceed?",
         choices: [
           {
@@ -51,7 +50,13 @@ function init() {
           }
         ]
       }
+      
     ]);
+   
+    
+   
+
+    
     switch (choice) {
       case "ADD_DEPARTMENT":
         return addDepartment();
@@ -71,7 +76,10 @@ function init() {
           return quit();        
    
     }
+    
 }
+
+
 async function addDepartment() {
     const department = await prompt([
       {
@@ -89,7 +97,7 @@ async function addDepartment() {
     loadPrompts();
   }
   async function addRole() {
-    const departments = await db.findAllDepartments();
+    const departments = await db.findDepartments();
   
     const departmentChoices = departments.map(({ id, name }) => ({
       name: name,
@@ -121,7 +129,7 @@ async function addDepartment() {
   }
   async function addEmployee() {
     const roles = await db.findRoles();
-    const employees = await db.allEmployees();
+    const employees = await db.addEmployees();
   
     const employee = await prompt([
       {
@@ -174,7 +182,7 @@ async function addDepartment() {
     loadPrompts();
   }
   async function viewDepartments() {
-    const departments = await db.findAllDepartments();
+    const departments = await db.findDepartments();
     console.log("\n");
     console.table(departments);
   
@@ -188,7 +196,7 @@ async function addDepartment() {
     loadPrompts();
   }
   async function viewEmployees() {
-    const employees = await db.allEmployees();
+    const employees = await db.findEmployee();
 
   console.log("\n");
   console.table(employees);
@@ -198,9 +206,8 @@ async function addDepartment() {
     loadPrompts();
   } 
   async function updateRole() {
-    const employees = await db.allEmployees();
-    console.log("\n");
-    console.table(employees);
+    const employees = await db.findEmployee();
+  
   
     const employeeChoices = employees.map(({ id, first_name, last_name }) => ({
       name: `${first_name} ${last_name}`,
@@ -232,7 +239,12 @@ async function addDepartment() {
       }
     ]);
   
-    await db.updateRole(employeeId, roleId);
+
+  
+
+  await db.updateRole(employeeId, roleId);
+
+  console.log("Updated role");
 
   
     loadPrompts();
