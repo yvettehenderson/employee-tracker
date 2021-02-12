@@ -63,7 +63,7 @@ function start() {
       case "ADD_ROLE":
         return addRole();
       case "ADD_EMPLOYEE":
-        return addEmployee();
+        return addEmployees();
       case "VIEW_DEPARTMENTS":
         return viewDepartments();  
       case "VIEW_ROLES":
@@ -81,25 +81,25 @@ function start() {
 
 
 async function addDepartment() {
-    const department = await prompt([
-      {
-        type: "input",
-        name: "name",
-        message: "department?"
-      }
-    ]);
-  
-    await db.newDepartment(department);
+  const department = await prompt([
+    {
+      type: "input",
+      name: "name",
+      message: "department?"
+    }
+  ]);
 
-  console.log(`Added ${department.name} to the database`);
+  await db.newDepartment(department);
+
+console.log(`Added ${department.name} to the database`);
 
 
-    loadPrompts();
-  }
+  loadPrompts();
+}
   async function addRole() {
-    const departments = await db.findDepartments();
+    const department = await db.findDepartments();
   
-    const departmentChoices = departments.map(({ id, name }) => ({
+    const departmentChoices = department.map(({ id, name }) => ({
       name: name,
       value: id
     }));
@@ -127,10 +127,8 @@ async function addDepartment() {
   
     loadPrompts();
   }
-  async function addEmployee() {
+  async function addEmployees() {
     const roles = await db.findRoles();
-    const employees = await db.addEmployees();
-  
     const employee = await prompt([
       {
         type: "input",
@@ -158,22 +156,7 @@ async function addDepartment() {
   
     employee.role_id = roleId;
   
-    const managerChoices = employees.map(({ id, first_name, last_name }) => ({
-      name: `${first_name} ${last_name}`,
-      value: id
-    }));
-    managerChoices.unshift({ name: "None", value: null });
-  
-    const { managerId } = await prompt({
-      type: "list",
-      name: "managerId",
-      message: "employee's manager?",
-      choices: managerChoices
-    });
-  
-    employee.manager_id = managerId;
-  
-    await db.newEmployee(employee);
+    await db.addEmployees(employee);
     console.log(
       `Added ${employee.first_name} ${employee.last_name} to the database`
     );
@@ -182,9 +165,9 @@ async function addDepartment() {
     loadPrompts();
   }
   async function viewDepartments() {
-    const departments = await db.findDepartments();
+    const department = await db.findDepartments();
     console.log("\n");
-    console.table(departments);
+    console.table(department);
   
     loadPrompts();
   } 
@@ -256,5 +239,5 @@ async function addDepartment() {
   }
    
  
-  // update
+
 
