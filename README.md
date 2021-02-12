@@ -19,3 +19,7 @@ Employees
 
 Roles
 ![Screen Shot 2021-02-11 at 2 58 05 PM](https://user-images.githubusercontent.com/70174557/107709139-96b1a800-6c79-11eb-9f01-0e5fd10ee7d9.png)
+
+
+Entire view
+![Screen Shot 2021-02-11 at 6 15 04 PM](https://user-images.githubusercontent.com/70174557/107723095-32044680-6c95-11eb-9c0f-e272fcec1248.png)
