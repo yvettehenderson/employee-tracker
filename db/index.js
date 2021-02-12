@@ -1,6 +1,5 @@
 const connection = require("./connect");
 
-
 class DB {
   constructor(connection) {
     this.connection = connection;
@@ -12,14 +11,10 @@ class DB {
     );
   }
 
-
   addEmployees(employee) {
-    return this.connection.query(
-      "INSERT INTO employee SET ?", employee);
+    return this.connection.query("INSERT INTO employee SET ?", employee);
   }
 
-
- 
   updateRole(employeeId, roleId) {
     return this.connection.query(
       "UPDATE employee SET role_id = ? WHERE id = ?",
@@ -27,14 +22,12 @@ class DB {
     );
   }
 
-  
   findRoles() {
     return this.connection.query(
       "SELECT role.id, role.title, department.name AS department, role.salary FROM role LEFT JOIN department on role.department_id = department.id;"
     );
   }
 
- 
   newRole(role) {
     return this.connection.query("INSERT INTO role SET ?", role);
   }
@@ -52,10 +45,6 @@ class DB {
   newDepartment(department) {
     return this.connection.query("INSERT INTO department SET ?", department);
   }
-
- 
-
-  
 }
 
 module.exports = new DB(connection);
