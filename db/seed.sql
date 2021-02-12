@@ -21,11 +21,11 @@ VALUES
     ('JR Project Manager', 60000, 4);
 
 INSERT INTO employee
-    (first_name, last_name, role_id, manager_id)
+    (first_name, last_name, role_id)
 VALUES
-    ('Sharon', 'Needles', 4,NULL),
-    ('Courtney', 'Act', 3, NULL),
-    ('Kim', 'Chi', 2, NULL),
-    ('Alyssa', 'Edwards',1, NULL),
-    ('Roxxy', 'Andrews', 2, NULL)
+    ('Sharon', 'Needles', 4),
+    ('Courtney', 'Act', 3),
+    ('Kim', 'Chi', 2),
+    ('Alyssa', 'Edwards',1),
+    ('Roxxy', 'Andrews', 2)
     
